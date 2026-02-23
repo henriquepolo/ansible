@@ -1,0 +1,35 @@
+---
+- name: Instalar Docker
+  hosts: all
+  become: yes
+
+  tasks:
+    - name: Atualizar cache apt
+      apt:
+        update_cache: yes
+
+    - name: Instalar dependencias
+      apt:
+        name:
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - software-properties-common
+        state: present
+
+    - name: Instalar Docker
+      apt:
+        name: docker.io
+        state: present
+
+    - name: Iniciar e habilitar Docker
+      service:
+        name: docker
+        state: started
+        enabled: yes
+
+    - name: Adicionar usuario super ao grupo docker
+      user:
+        name: super
+        groups: docker
+        append: yes

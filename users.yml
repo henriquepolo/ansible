@@ -1,0 +1,19 @@
+---
+- name: Criar usuario super
+  hosts: all
+  become: yes
+
+  tasks:
+    - name: Criar usuario super
+      user:
+        name: super
+        shell: /bin/bash
+        groups: sudo
+        append: yes
+        create_home: yes
+
+    - name: Permitir sudo sem senha
+      copy:
+        dest: /etc/sudoers.d/super
+        content: "super ALL=(ALL) NOPASSWD: ALL"
+        mode: '0440'

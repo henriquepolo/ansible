@@ -1,0 +1,104 @@
+---
+- name: Instalação de ferramentas essenciais no Linux
+  hosts: localhost
+  become: yes
+  gather_facts: no
+
+  vars:
+    packages:
+      - wget
+      - net-tools
+      - qbittorrent
+
+  tasks:
+
+    - name: Mensagem inicial
+      debug:
+        msg: "🚀 Iniciando instalação de ferramentas essenciais..."
+
+    - name: Instalar pacotes básicos
+      apt:
+        name: "{{ packages }}"
+        state: present
+      register: basic_pkgs
+
+    - name: Mostrar progresso pacotes básicos
+      debug:
+        msg: |
+          {% if basic_pkgs.changed %}
+          ✅ Pacotes básicos instalados: {{ packages }}
+          {% else %}
+          ⚠️ Pacotes básicos já estavam instalados
+          {% endif %}
+
+    - name: Instalar dependências para repositórios externos
+      apt:
+        name:
+          - software-properties-common
+          - apt-transport-https
+          - gnupg
+        state: present
+
+    - name: Adicionar chave do VS Code
+      apt_key:
+        url: https://packages.microsoft.com/keys/microsoft.asc
+        state: present
+
+    - name: Adicionar repositório do VS Code
+      apt_repository:
+        repo: "deb [arch=amd64] https://packages.microsoft.com/repos/code stable main"
+        state: present
+
+    - name: Adicionar repositório do AnyDesk
+      apt_repository:
+        repo: "deb http://deb.anydesk.com/ all main"
+        state: present
+        filename: anydesk
+
+    - name: Adicionar chave do AnyDesk
+      apt_key:
+        url: https://keys.anydesk.com/repos/DEB-GPG-KEY
+        state: present
+
+    - name: Atualizar cache do apt
+      apt:
+        update_cache: yes
+      register: apt_update
+
+    - name: Mostrar progresso atualização cache
+      debug:
+        msg: "✅ Cache do apt atualizado"
+
+    - name: Instalar Visual Studio Code
+      apt:
+        name: code
+        state: present
+      register: vscode
+
+    - name: Mostrar progresso VS Code
+      debug:
+        msg: |
+          {% if vscode.changed %}
+          ✅ Visual Studio Code instalado
+          {% else %}
+          ⚠️ Visual Studio Code já estava instalado
+          {% endif %}
+
+    - name: Instalar AnyDesk
+      apt:
+        name: anydesk
+        state: present
+      register: anydesk
+
+    - name: Mostrar progresso AnyDesk
+      debug:
+        msg: |
+          {% if anydesk.changed %}
+          ✅ AnyDesk instalado
+          {% else %}
+          ⚠️ AnyDesk já estava instalado
+          {% endif %}
+
+    - name: Mensagem final
+      debug:
+        msg: "🎉 Instalação concluída!"

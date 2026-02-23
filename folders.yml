@@ -1,0 +1,29 @@
+---
+- name: Criar pastas padrao
+  hosts: all
+  become: yes
+
+  tasks:
+    - name: Criar pasta projetos
+      file:
+        path: /opt/projetos
+        state: directory
+        owner: super
+        group: super
+        mode: '0755'
+
+    - name: Criar pasta docker
+      file:
+        path: /opt/docker
+        state: directory
+        owner: super
+        group: super
+        mode: '0755'
+
+    - name: Criar pasta aprendendo
+      file:
+        path: /opt/aprendendo
+        state: directory
+        owner: super
+        group: super
+        mode: '0755'

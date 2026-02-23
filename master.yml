@@ -1,0 +1,6 @@
+---
+#- import_playbook: users.yml
+#- import_playbook: folders.yml
+#- import_playbook: docker.yml
+#- import_playbook: basico.yml
+- import_playbook: fileserversetup.yml

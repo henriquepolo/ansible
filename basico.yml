@@ -1,0 +1,24 @@
+---
+- name: Instalar utilitários básicos
+  hosts: all
+  become: true          # precisa de sudo no host remoto
+  gather_facts: yes
+
+  tasks:
+    - name: Atualizar cache do apt
+      ansible.builtin.apt:
+        update_cache: yes
+
+    - name: Instalar pacotes essenciais
+      ansible.builtin.apt:
+        name:
+          - curl
+          - wget
+          - vim
+          - unzip
+          - git
+          - tree
+          - htop
+          - traceroute
+          - nmap
+        state: present

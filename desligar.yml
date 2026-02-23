@@ -1,0 +1,9 @@
+---
+- name: Desligar todas as maquinas
+  hosts: all
+  become: yes
+
+  tasks:
+    - name: desligaro servidor
+      command: shutdown -h now
+      

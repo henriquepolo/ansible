@@ -1,0 +1,17 @@
+[xubuntu]
+192.168.122.2
+192.168.122.144
+192.168.122.19
+192.168.122.87
+
+[debian]
+#192.168.122.36
+192.168.122.43
+
+
+[xubuntu:vars]
+ansible_user=devops
+
+[debian:vars]
+ansible_user=debian
+

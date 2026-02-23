@@ -1,0 +1,50 @@
+---
+- name: Setup DevOps File Server Structure
+  hosts: debian
+  become: yes
+
+  vars:
+    base_path: /home/trabalho
+    users:
+      - henrique
+      - super
+      - infra
+    folders:
+      - 01-infrastructure
+      - 02-configuration
+      - 03-containers
+      - 04-pipelines
+      - 05-knowledge
+    group_name: devopsgrp
+
+  tasks:
+
+    - name: Create group
+      group:
+        name: "{{ group_name }}"
+        state: present
+
+    - name: Ensure users exist
+      user:
+        name: "{{ item }}"
+        state: present
+        groups: "{{ group_name }}"
+        append: yes
+      loop: "{{ users }}"
+
+    - name: Create base directory
+      file:
+        path: "{{ base_path }}"
+        state: directory
+        owner: root
+        group: "{{ group_name }}"
+        mode: "2775"
+
+    - name: Create subdirectories
+      file:
+        path: "{{ base_path }}/{{ item }}"
+        state: directory
+        owner: root
+        group: "{{ group_name }}"
+        mode: "2775"
+      loop: "{{ folders }}"
